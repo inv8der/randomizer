@@ -1,0 +1,243 @@
+/*
+@font-face {
+	font-family:"bmusic";
+	src:url("/css/fonts/bmusic.eot");
+	src:local("@"),url("/styles/fonts/bmusic.eot?#iefix") format("embedded-opentype"),url("/styles/fonts/bmusic.woff") format("woff"),url("/styles/fonts/bmusic.ttf") format("truetype"),url("/styles/fonts/bmusic.svg#neuzeit_groteskblack") format("svg");
+	font-weight:normal;
+	font-style:normal
+}
+*/
+
+@font-face {
+	font-family:"neuzeit_groteskblack";
+	/*
+	src:url("http://www.beatsmusic.com/styles/fonts/neuzeitgro-bla-webfont.eot");
+	src:url("http://www.beatsmusic.com/styles/fonts/neuzeitgro-bla-webfont.eot?#iefix") format("embedded-opentype"),url("http://www.beatsmusic.com/styles/fonts/neuzeitgro-bla-webfont.woff") format("woff"),url("http://www.beatsmusic.com/styles/fonts/neuzeitgro-bla-webfont.ttf") format("truetype"),url("http://www.beatsmusic.com/styles/fonts/neuzeitgro-bla-webfont.svg#neuzeit_groteskblack") format("svg");
+	*/
+	src:url("/fonts/neuzeitgro-bla-webfont.woff") format("woff"),url("/fonts/neuzeitgro-bla-webfont.ttf") format("truetype");
+	font-weight:normal;
+	font-style:normal
+}
+
+body {
+	/*font-family: neuzeit_groteskblack, Helvetica, sans-serif;*/
+	font-family: Helvetica Neue, Helvetica, sans-serif;
+}
+
+h1 {
+	font-family: neuzeit_groteskblack, "Helvetica Neue", sans-serif;
+	font-weight: 400;
+	text-transform: uppercase;
+	letter-spacing: -1px;
+	font-size: 48px;
+	line-height: 40px;
+}
+
+#navBar {
+	position: fixed;
+	height: 100%;
+	width: 90px;
+	background-color: #202020;
+	z-index: 100;
+	border-right: 2px solid #ddd;
+}
+
+#navBar > * {
+	display: inline-block;
+	width: 100%;
+	height: 90px;
+	border-bottom: 2px solid #ddd;
+}
+
+#navBar #user {
+	background-image: url(/images/user1.png);
+}
+
+#navBar #settings {
+	background-image: url(/images/settings4.png);
+}
+
+#navBar #playlist {
+	background-image: url(/images/playlist1.png);
+}
+
+#randomizerApp {
+	margin-left: 100px;
+}
+
+#randomizerApp #header {
+	padding: 20px;
+}
+
+#randomizerApp #header h1 {
+	margin-top: 0;
+}
+
+#main {
+	height: 550px;
+	width: 800px;
+	margin: 0 auto;
+}
+
+#artistInfo {
+	float:left;
+	background-color: #202020;
+	height: 500px;
+	width: 300px;
+}
+
+#randomizer {
+	float: right;
+	position: relative;
+	height: 500px;
+	width: 500px;
+	/*border: 2px solid black;*/
+	background-color: #5E0ABC;
+	/*background-color: #BF00A8;*/
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+button:focus {
+	outline: 0;
+}
+
+button {
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: center;
+	border: none;
+}
+
+#randomize {
+	background-image: url(/images/play.png);
+	background-size: contain;
+	height: 200px;
+	width: 200px;
+	display: block;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin: -100px 0 0 -100px;
+}
+
+#controls {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+}
+
+#like {
+	background-image: url(/images/like.png);
+	background-size: contain;
+	height: 64px;
+	width: 64px;
+	float: right;
+}
+
+#like.enabled {
+	background-image: url(/images/like3.png);
+}
+
+#dislike {
+	background-image: url(/images/dislike4.png);
+	background-size: contain;
+	height: 64px;
+	width: 64px;
+	float: left;
+}
+
+#loginPrompt {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 650px;
+	height: 550px;
+}
+
+#loginPrompt > iframe {
+	border: none;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+#appSettings {
+	display: table;
+	position: absolute;
+	top: 0;
+	height: 400px;
+	min-width: 600px;
+	padding: 0 40px;
+	text-align: center;
+	background-color: #202020;
+	border: 2px solid white;
+	border-radius: 6px;
+
+	top: 50%;
+    margin-top: -200px;
+    left: 50%;
+    margin-left: -250px;
+
+    visibility: hidden;
+    z-index: 101;
+}
+
+#appSettings.visible {
+	visibility: visible;
+}
+
+#appSettings .slider {
+	margin: 0 auto;
+	height: 250px
+}
+
+#appSettings label {
+	display: block;
+	color: white;
+	margin-top: 15px;
+}
+
+#appSettings > div {
+	display: table-cell;
+	vertical-align: middle;
+	padding: 0 40px;
+}
+
+#playlistView {
+	position: fixed;
+	background-color: #202020;
+	top: 0;
+	left: -160px;
+	width: 250px;
+	height: 100%;
+	color: white;
+	border-right: 2px solid #ddd;
+	transition: left 1s ease;
+}
+
+#playlistView.visible {
+	left: 90px;
+}
+
+#playlistView > div {
+	border-bottom: 2px solid #aaa;
+	height: 70px;
+	width: 100%;
+}
+
+#playlistView .thumb {
+	height: 68px;
+	width: 68px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#playlistView .trackInfo {
+	display: inline-block;
+	vertical-align: top;
+	line-height: 0;
+	padding-left: 10px;
+}
+
+
