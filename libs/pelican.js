@@ -172,7 +172,6 @@ Track.lookupById = function(track_id, client_id, callback) {
             }
 
             record = {
-                '_id': data.id,
                 'title': data.title,
                 'artist': data.artist_display_name,
                 'duration': data.duration
