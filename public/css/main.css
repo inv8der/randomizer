@@ -149,10 +149,19 @@ button {
 
 #loginPrompt {
 	position: absolute;
-	top: 0;
-	left: 0;
+	background-color: #f2f3f5;
+	border: 2px solid black;
+	top: 50%;
+	left: 50%;
+	margin-top: -275px;
+	margin-left: -325px;
 	width: 650px;
 	height: 550px;
+	display: none;
+}
+
+#loginPrompt.visible {
+	display: block;
 }
 
 #loginPrompt > iframe {
@@ -163,11 +172,10 @@ button {
 }
 
 #appSettings {
-	display: table;
+	display: block;
 	position: absolute;
-	top: 0;
 	height: 400px;
-	min-width: 600px;
+	width: 900px;
 	padding: 0 40px;
 	text-align: center;
 	background-color: #202020;
@@ -177,10 +185,12 @@ button {
 	top: 50%;
     margin-top: -200px;
     left: 50%;
-    margin-left: -250px;
+    margin-left: -400px;
 
     visibility: hidden;
     z-index: 101;
+
+    overflow: scroll;
 }
 
 #appSettings.visible {
@@ -200,8 +210,8 @@ button {
 
 #appSettings > div {
 	display: table-cell;
-	vertical-align: middle;
-	padding: 0 40px;
+	vertical-align: top;
+	padding: 40px 30px;
 }
 
 #playlistView {
@@ -214,6 +224,7 @@ button {
 	color: white;
 	border-right: 2px solid #ddd;
 	transition: left 1s ease;
+	overflow: scroll;
 }
 
 #playlistView.visible {
@@ -229,15 +240,27 @@ button {
 #playlistView .thumb {
 	height: 68px;
 	width: 68px;
-	display: inline-block;
+	display: block;
+	float: left;
 	vertical-align: top;
 }
 
 #playlistView .trackInfo {
-	display: inline-block;
+	display: block;
+	float: right;
+	width: 180px;
+	height: 68px;
 	vertical-align: top;
 	line-height: 0;
 	padding-left: 10px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+#jplayer {
+	width: 100px;
+	height: 100px;
 }
 
 
