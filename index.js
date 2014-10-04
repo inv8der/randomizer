@@ -1,8 +1,19 @@
 var Hapi = require('hapi');
+var Path = require('path');
 var Wreck = require('wreck');
+var Randomizer = require('./libs/randomizer');
+var Controllers = require('./libs/controllers')
 
 var port = Number(process.env.PORT || 5000);
-var server = new Hapi.Server(port);
+var server = new Hapi.Server(port, {
+    views: {
+        engines: { html: require('handlebars') },
+        path: Path.join(__dirname, 'public')
+    }
+});
+
+var app = new Randomizer({client_id: "38q2wmxsng5k7gdbj5vyq8t6"});
+var routes = Controllers.set(app);
 
 var beatsmusic = {
     protocol: 'oauth2',
@@ -46,41 +57,34 @@ var beatsmusic = {
     }
 };
 
-// Register bell with the server
-server.pack.register(require('bell'), function(err) {
+// Register plugins with the server
+server.pack.register(
+    [{ plugin: require('bell') },
+     { plugin: require('hapi-auth-cookie') }], 
 
-    // Declare an authentication strategy using the bell scheme
-    // with the name of the provider, cookie encryption password,
-    // and the OAuth client credentials.
-    server.auth.strategy('beatsmusic', 'bell', {
-        provider: beatsmusic,
-        password: 'cookiemonster',
-        clientId: '38q2wmxsng5k7gdbj5vyq8t6',
-        clientSecret: 'bjXb8gxAuSUFbeF2wuPWG9dx',
-        isSecure: false     // Terrible idea but required if not using HTTPS
-    });
+    function(err) {
+        server.auth.strategy('session', 'cookie', {
+            cookie: 'sid-randomizer',
+            password: 'cookiemonster',
+            clearInvalid: true,
+            isSecure: false
+        });
 
-    // Use the 'beatsmusic' authentication strategy to protect the
-    // endpoint handling the incoming authentication credentials.
-    // This endpoints usually looks up the third party account in
-    // the database and sets some application state (cookie) with
-    // the local application account information.
-    server.route({
-        method: ['GET', 'POST'], // Must handle both GET and POST
-        path: '/login',          // The callback endpoint registered with the provider
-        config: {
-            auth: 'beatsmusic',
-            handler: function(request, reply) {
+        // Declare an authentication strategy using the bell scheme
+        // with the name of the provider, cookie encryption password,
+        // and the OAuth client credentials.
+        server.auth.strategy('beatsmusic', 'bell', {
+            provider: beatsmusic,
+            password: 'cookiemonster',
+            clientId: '38q2wmxsng5k7gdbj5vyq8t6',
+            clientSecret: 'bjXb8gxAuSUFbeF2wuPWG9dx',
+            isSecure: false     // Terrible idea but required if not using HTTPS
+        });
+    }
+);
 
-                // Perform any account lookup or registration, setup local session,
-                // and redirect to the application. The third-party credentials are
-                // stored in request.auth.credentials. Any query parameters from
-                // the initial request are passed back via request.auth.credentials.query.
-                return reply.redirect('/success.html');
-            }
-        }
-    });
-});
+// Application specific routes
+server.route(routes);
 
 server.route({
     path: '/{path*}',
@@ -97,10 +101,27 @@ server.route({
 server.route({
     path: '/',
     method: 'GET',
-    handler: function(request, reply) {
-        reply.file('./public/index.html');
+    config: {
+        auth: {
+            mode: 'try',
+            strategy: 'session'
+        },
+        handler: function(request, reply) {
+            var user_id = 0;
+            if (request.auth.isAuthenticated) {
+                var user_id = request.auth.credentials.id;
+            }
+            reply.file('./public/index.html');
+        }
     }
 });
+
+// Log incoming requests to see how Ember makes requests for data
+server.ext('onRequest', function(request, next) {
+    console.log(request.url);
+    next();
+})
+
 
 server.start(function() {
     console.log('Hapi server started @ ', server.info.uri);

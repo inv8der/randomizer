@@ -3,7 +3,17 @@
     <title></title>
     <script type="text/javascript">
         if (window.parent) {
-            window.parent.postMessage('success', '*');
+            var data = {
+                _id: '{{_id}}',
+                username: '{{username}}',
+                full_name: '{{full_name}}',
+                weights: [],
+                playlist: '{{playlist}}'
+            }
+            {{#each weights}}
+            data.weights.push('{{this}}');
+            {{/each}}
+            window.parent.postMessage(data, '*');
         }
     </script>
 </head>

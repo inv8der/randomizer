@@ -4,28 +4,23 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.1/themes/eggplant/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="css/main.css" />
-    <!--
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $(window).on('message', function(event) {
-                console.log(event);
-            });
-        });
-    </script>
-    -->
 </head>
 <body>
     <script type="text/x-handlebars" data-template-name="randomizer">
         <nav id="navBar">
-            <button id="user"></button>
+            <button id="user" {{action "manageSession"}}></button>
             <button id="settings" {{action "toggleSettings"}}></button>
             <button id="playlist" {{action "togglePlaylist"}}></button>
         </nav>
 
         <section id="randomizerApp">
             <header id="header">
-                <h1>Hello there!</h1>
-                <sup>(to do anything interesting, you'll need to login)</sup>
+                {{#if isUserAuthenticated}}
+                    <h1>Hello {{user.username}}</h1>
+                {{else}}
+                    <h1>Welcome Stranger!</h1>
+                    <sup>(to do anything interesting, you&apos;ll need to login)</sup>
+                {{/if}}
             </header>
 
             <section id="main">
@@ -40,35 +35,33 @@
             </section>
 
             <footer id="footer">
-                <!--<div id="jplayer"></div>-->
+                {{jplayer}}
             </footer>
         </section>
 
         <div id="playlistView" {{bind-attr class="isPlaylistVisible:visible"}}>
-            {{#each playlist in user.playlists}}
-                {{#each track in playlist.tracks}}
-                    <div>
-                        <img class="thumb" {{bind-attr src=track.thumbnail}} />
-                        <div class="trackInfo">
-                            <h4>{{track.title}}</h4>
-                            <span>{{track.artist}}</span>
-                        </div>
-                    </div>
-                {{/each}}
+            {{#each track in user.playlist.tracks}}
+            <div>
+                <img class="thumb" {{bind-attr src=track.thumbnail}} />
+                <div class="trackInfo">
+                    <h5>{{track.title}}</h5>
+                    <span>{{track.artist}}</span>
+                </div>
+            </div>
             {{/each}}
         </div>
 
-        <!--
-        <div id="loginPrompt" hidden>
+        <div id="loginPrompt" {{bind-attr class="displayLoginPrompt:visible"}}>
+            {{#if displayLoginPrompt}}
             <iframe src="/login"></iframe>
+            {{/if}}
         </div>
-        -->
 
         <div id="appSettings" {{bind-attr class="isSettingsVisible:visible"}}>
-            {{#each genreWeight in user.genreWeights}}
+            {{#each weight in user.weights}}
             <div>
-                {{slider value=genreWeight.weight data-id=genreWeight.id}}
-                <label>{{genreWeight.genre.name}}</label>
+                {{slider value=weight.value data-id=weight.id}}
+                <label>{{weight.genre.name}}</label>
             </div>
             {{/each}}
         </div>
@@ -80,8 +73,10 @@
     <script src="js/libs/handlebars-1.0.0.js"></script>
     <script src="js/libs/ember.js"></script>
     <script src="js/libs/ember-data.js"></script>
+    <script src="js/libs/cookies.js"></script>
     <script src="js/app.js"></script>
     <script src="js/models/models.js"></script>
     <script src="js/views/slider_view.js"></script>
+    <script src="js/views/jplayer_view.js"></script>
 </body>
 </html>
