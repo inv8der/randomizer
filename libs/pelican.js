@@ -313,7 +313,7 @@ internals.connect = function(options) {
         success = options.success,
         error = options.error;
 
-    mongoose.connect(url || process.env.MONGO_URL);
+    mongoose.connect(url || process.env.MONGOHQ_URL);
 
     var db = mongoose.connection;
 
