@@ -3,7 +3,7 @@ App.SliderView = Ember.View.extend({
     attributeBindings: ['data-id'],
 
     updateSlider: function(sender, key, val, rev) {
-        // The value property will update in repsonse to changes in the underlying model.
+        // The value property will update in response to changes in the underlying model.
         // By adding an observer to this property, we can be notified when it changes and
         // update the slider accordingly
         var sliderValue = this.$().slider('value');
