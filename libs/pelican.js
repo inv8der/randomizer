@@ -108,7 +108,6 @@ Playlist.sync = function(playlist_id, accessToken, callback) {
                 'track_ids': playlistObj.tracks,
                 'access_token': accessToken
             }, function(err, response) {
-                console.log(response);
                 if (err) return callback(err, null);
 
                 var result = BeatsAPI.parseResponse(response);

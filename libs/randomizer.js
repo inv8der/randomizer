@@ -74,7 +74,6 @@ Randomizer.prototype.login = function(user, callback) {
 
                 var newGenres = genres.filter(function(genre) {
                     for (var i=0; i<weights.length; i++) {
-                        console.log(weights[i].genre + ' === ' + genre.id + ' --> ' + (weights[i].genre === genre.id));
                         if (weights[i].genre === genre.id) {
                             return false;
                         }
@@ -99,7 +98,7 @@ Randomizer.prototype.login = function(user, callback) {
 
             // Always hit the Beats API for the Randomizer playlist so that we can
             // retreive any updates that were made offline. If no playlist is found,
-            // create a new Ranomizer playlist
+            // create a new Randomizer playlist
             Pelican.Playlist.lookup(
                 { name: 'Randomizer', owner: user.id },
                 user.access_token,
@@ -215,7 +214,18 @@ Randomizer.prototype.getGenreWeights = function(weight_ids, callback) {
 
         callback(null, null);
     });
-}
+};
+
+Randomizer.prototype.updateGenreWeight = function(weight_id, value, callback) {
+    Pelican.GenreWeight.findByIdAndUpdate(weight_id, { 'value': value }, function(err, weight) {
+        if (err) return callback(err, null);
+        if (weight) {
+            return callback(null, weight.toObject());
+        }
+
+        callback(null, null);
+    });
+};
 
 Randomizer.prototype.getUser = function(user_id, callback) {
     Pelican.User.findById(user_id, function(err, user) {

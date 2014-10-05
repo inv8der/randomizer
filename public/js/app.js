@@ -45,6 +45,7 @@ App.RandomizerController = Ember.ObjectController.extend(Ember.Evented, {
             user.get('weights').then(function(genreWeights) {
                 var genreWeight = genreWeights.findBy('id', id);
                 genreWeight.set('value', value);
+                genreWeight.save();
             });
         },
 
@@ -115,6 +116,7 @@ App.RandomizerController = Ember.ObjectController.extend(Ember.Evented, {
                         tracks.pushObject(nowPlaying);
                         _this.set('isFavorited', true);
                     }
+                    playlist.save();
                 });
             });
         },
@@ -136,7 +138,10 @@ App.RandomizerController = Ember.ObjectController.extend(Ember.Evented, {
                 $.ajax({
                     url: '/logout',
                     success: function() {
+                        // TODO: Remove playlist from data store so that future sign ins from the
+                        // same user force a refresh from the server.
                         docCookies.removeItem('user');
+                        _this.trigger('mediaStopped');
                         _this.get('target').send('refreshView');
                     }
                 })

@@ -171,10 +171,7 @@ module.exports.set = function(app) {
             path: '/playlists/{id}',
             config: {
                 handler: function(request, reply) {
-                    var data = request.payload;    
-
-                    console.log(data.playlist.tracks);
-                    //reply({});
+                    var data = request.payload;
             
                     app.updatePlaylist(request.params.id, data.playlist.tracks, function(err, playlist) {
                         if (err) throw err;
@@ -214,18 +211,14 @@ module.exports.set = function(app) {
             path: '/genreWeights/{id}',
             config: {
                 handler: function(request, reply) {
-                    console.log(request.payload);
+                    var data = request.payload;
 
-                    /*
-                    app.updateGenreWeight(request.params.id, function(err, weight) {
+                    app.updateGenreWeight(request.params.id, data.genreWeight.value, function(err, weight) {
                         if (err) throw err;
                         var data = { 'genreWeight': weight };
                         var json = JSON.stringify(data || []);
                         return reply(json)
                     });
-                    */
-
-                    return reply({});
                 }
             }
         },
