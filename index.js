@@ -102,26 +102,19 @@ server.route({
     path: '/',
     method: 'GET',
     config: {
-        auth: {
-            mode: 'try',
-            strategy: 'session'
-        },
         handler: function(request, reply) {
-            var user_id = 0;
-            if (request.auth.isAuthenticated) {
-                var user_id = request.auth.credentials.id;
-            }
             reply.file('./public/index.html');
         }
     }
 });
 
 // Log incoming requests to see how Ember makes requests for data
+/*
 server.ext('onRequest', function(request, next) {
     console.log(request.url);
     next();
-})
-
+});
+*/
 
 server.start(function() {
     console.log('Hapi server started @ ', server.info.uri);
