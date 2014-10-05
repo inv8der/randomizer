@@ -72,7 +72,6 @@ App.RandomizerController = Ember.ObjectController.extend(Ember.Evented, {
                         chosenOne = featuredTracks.toArray()[i];
 
                     _this.set('nowPlaying', chosenOne);
-                    console.log('Winner: ' + winner_id);
                     _this.trigger('mediaChanged', chosenOne.get('id'));
 
                     // TODO: Find a way to move this out of the controller
