@@ -3,8 +3,7 @@ var Pelican = require('./pelican');
 var BeatsAPI = require('./bapi');
 
 var internals = {
-    client_id: '',
-    users: {}
+    client_id: ''
 }
 
 var Randomizer = function(options) {
@@ -27,11 +26,6 @@ Randomizer.prototype.initialize = function initialize() {
 };
 
 Randomizer.prototype.login = function(user, callback) {
-    internals.users[user.id] = {
-        access_token: user.access_token,
-        refresh_token: user.refresh_token
-    };
-
     var userRecord = null;
 
     Step(
@@ -132,9 +126,7 @@ Randomizer.prototype.login = function(user, callback) {
     );
 }
 
-Randomizer.prototype.logout = function(user) {
-    delete internals.users[user.id];
-}
+Randomizer.prototype.logout = function(user) {};
 
 Randomizer.prototype.getPlaylist = function(playlist_id, callback) {
     Pelican.Playlist.findById(
@@ -148,15 +140,14 @@ Randomizer.prototype.getPlaylist = function(playlist_id, callback) {
     );
 };
 
-Randomizer.prototype.updatePlaylist = function(playlist_id, tracks, callback) {
+Randomizer.prototype.updatePlaylist = function(playlist_id, tracks, access_token, callback) {
     Pelican.Playlist.findByIdAndUpdate(
         playlist_id,
         { 'tracks': tracks },
         function(err, playlist) {
             if (err) return callback(err, null);
             if (playlist) {
-                var user = internals.users[playlist.owner];
-                Pelican.Playlist.sync(playlist_id, user.access_token, function(err, playlist) {
+                Pelican.Playlist.sync(playlist_id, access_token, function(err, playlist) {
                     if (err) return callback(err, null);
                     if (playlist) return callback(null, playlist.toObject());
 
@@ -249,15 +240,13 @@ Randomizer.prototype.getUser = function(user_id, callback) {
     });
 };
 
-Randomizer.prototype.getAudioStream = function(track_id, user_id, callback) {
-    var user = internals.users[user_id];
-
+Randomizer.prototype.getAudioStream = function(track_id, access_token, callback) {
     // Since we don't store audio streams in the db, it didn't make much since to go
     // through Pelican to retreive this info. I could be persuaded either way though.
     BeatsAPI.Audio.playback({
         track_id: track_id,
         acquire: 1,
-        access_token: user.access_token
+        access_token: access_token
     }, function(err, response) {
         if (err) return callback(err, null);
 

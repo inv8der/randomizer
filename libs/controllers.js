@@ -170,10 +170,12 @@ module.exports.set = function(app) {
             method: ['POST', 'PUT'],
             path: '/playlists/{id}',
             config: {
+                auth: 'session',
                 handler: function(request, reply) {
-                    var data = request.payload;
+                    var data = request.payload,
+                        user = request.auth.credentials;
             
-                    app.updatePlaylist(request.params.id, data.playlist.tracks, function(err, playlist) {
+                    app.updatePlaylist(request.params.id, data.playlist.tracks, user.access_token, function(err, playlist) {
                         if (err) throw err;
 
                         var data = { 'playlist': playlist };
@@ -229,9 +231,11 @@ module.exports.set = function(app) {
             config: {
                 auth: 'session',
                 handler: function(request, reply) {
-                    // The ability to stream requires a user to be signed in, so we need to pass the user id
-                    // in addition the track id to retrieve the audio stream
-                    app.getAudioStream(request.params.id, request.auth.credentials.id, function(err, stream) {
+                    var user = request.auth.credentials;
+
+                    // The ability to stream requires a user to be signed in, so we need to pass the user's
+                    // access token in addition the track id to retrieve the audio stream
+                    app.getAudioStream(request.params.id, user.access_token, function(err, stream) {
                         if (err) throw err;
                         var json = JSON.stringify(stream || {});
                         return reply(json);
