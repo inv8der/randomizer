@@ -3,15 +3,20 @@ App.JPlayerView = Ember.View.extend({
     classNames: ['jplayer'],
 
     didInsertElement: function() {
+        var controller = this.get('controller');
+
         // Once the view is rendered, initialize jplayer so we can play de music
         this.$().jPlayer({
             swfPath: 'js/libs',
-            supplied: 'rtmpa'
+            supplied: 'rtmpa',
+            ended: function() {
+                controller.send('randomize');
+            }
         });
 
-        var controller = this.get('controller');
         controller.on('mediaChanged', this, this.playTrack);
         controller.on('mediaStopped', this, this.stopPlayback);
+
     },
 
     willDestroyElement: function() {
