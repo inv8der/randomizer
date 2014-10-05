@@ -17,6 +17,7 @@ App.JPlayerView = Ember.View.extend({
     willDestroyElement: function() {
         var controller = this.get('controller');
         controller.off('mediaChanged', this, this.playTrack);
+        controller.off('mediaStopped', this, this.stopPlayback);
     },
 
     playTrack: function(track_id) {
